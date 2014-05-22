@@ -12,6 +12,7 @@ public class MainActivity  extends BlunoLibrary {
 	private Button buttonSerialSend;
 	private EditText serialSendText;
 	private EditText serialReceivedText;
+	private PlainProtocol mPlainProtocol= new PlainProtocol();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +30,8 @@ public class MainActivity  extends BlunoLibrary {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
-				serialSend(serialSendText.getText().toString());				//send the data to the BLUNO
+				serialSend(mPlainProtocol.write(BleCmd.Disp + serialSendText.getText(), 0,0));
+				//serialSend(serialSendText.getText().toString());				//send the data to the BLUNO
 			}
 		});
         
@@ -104,7 +104,7 @@ public class MainActivity  extends BlunoLibrary {
 	@Override
 	public void onSerialReceived(String theString) {							//Once connection data received, this function will be called
 		// TODO Auto-generated method stub
-		serialReceivedText.append(theString);							//append the text into the EditText
+		serialReceivedText.append(theString + "\n");							//append the text into the EditText
 		//The Serial data from the BLUNO may be sub-packaged, so using a buffer to hold the String is a good choice.					
 	}
 

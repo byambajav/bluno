@@ -284,6 +284,10 @@ public abstract  class BlunoLibrary  extends Activity{
         	final String action = intent.getAction();
             System.out.println("mGattUpdateReceiver->onReceive->action="+action);
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
+            	// Gets RSSI strength
+                int  rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
+                Log.i("debug","  RSSI: " + rssi + "dBm");
+            	
                 mConnected = true;
             	mHandler.removeCallbacks(mConnectingOverTimeRunnable);
 
