@@ -2,6 +2,7 @@ package com.example.bluno_demo;
 
 import android.os.Bundle;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -9,7 +10,9 @@ import android.widget.EditText;
 
 public class MainActivity extends BlunoLibrary {
 	private static final String TAG = MainActivity.class.getSimpleName();
+	
 	private Button buttonScan;
+	private Button buttonReadRSSI;
 	private Button buttonSerialSend;
 	private EditText serialSendText;
 	private EditText serialReceivedText;
@@ -19,9 +22,8 @@ public class MainActivity extends BlunoLibrary {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		onCreateProcess(); //onCreate Process by BlunoLibrary
 
-		serialBegin(115200); //set the Uart Baudrate on BLE chip to 115200
+		onCreateProcess(); //onCreate Process by BlunoLibrary
 
 		serialReceivedText=(EditText) findViewById(R.id.serialReveicedText); //initial the EditText of the received data
 		serialSendText=(EditText) findViewById(R.id.serialSendText); //initial the EditText of the sending data
@@ -32,17 +34,23 @@ public class MainActivity extends BlunoLibrary {
 			@Override
 			public void onClick(View v) {
 				serialSend(mPlainProtocol.write(BleCmd.Disp + serialSendText.getText(), 0,0));
-				//serialSend(serialSendText.getText().toString()); //send the data to the BLUNO
 			}
 		});
 
 		buttonScan = (Button) findViewById(R.id.buttonScan); //initial the button for scanning the BLE device
 		buttonScan.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				buttonScanOnClickProcess(); //Alert Dialog for selecting the BLE device
+			}
+		});
+		
+		buttonReadRSSI = (Button) findViewById(R.id.buttonReadRSSI); //initial the button for scanning the BLE device
+		buttonReadRSSI.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				boolean rssi = mBluetoothLeService.readRemoteRSSI();
+				Log.d("rssi_read", "Try: " + rssi);
 			}
 		});
 	}
@@ -52,8 +60,6 @@ public class MainActivity extends BlunoLibrary {
 		System.out.println("BlUNOActivity onResume");
 		onResumeProcess(); //onResume Process by BlunoLibrary
 	}
-
-
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -79,7 +85,7 @@ public class MainActivity extends BlunoLibrary {
 	}
 
 	@Override
-	public void onConectionStateChange(connectionStateEnum theConnectionState) { //Once connection state changes, this function will be called
+	public void onConnectionStateChange(connectionStateEnum theConnectionState) { //Once connection state changes, this function will be called
 		switch (theConnectionState) { //Four connection state
 		case isConnected:
 			buttonScan.setText("Connected");

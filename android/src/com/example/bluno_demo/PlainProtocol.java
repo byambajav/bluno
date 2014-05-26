@@ -56,19 +56,7 @@ public class PlainProtocol {
 			return false;
 		}
 
-		return true;	 
-		//	    int i;
-		//	    if (stringBuf.indexOf(0)<'0'||stringBuf.indexOf(0)>'9') {
-		//	      if (stringBuf.indexOf(0)!='-') {
-		//	        return false;
-		//	      }
-		//	    }
-		//	    for (i=1; i<stringBuf.length(); i++) {
-		//	      if (stringBuf.indexOf(i)<'0'||stringBuf.indexOf(i)>'9') {
-		//	        return false;
-		//	      }
-		//	    }
-		//	    return true;
+		return true;
 	}
 
 	private boolean parseFrame(String theFrame)    //parse the frame received

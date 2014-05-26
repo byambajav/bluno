@@ -1,12 +1,14 @@
 package com.example.bluno_demo;
 
 import android.app.Service;
+import android.bluetooth.BluetoothGatt;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
 public class RSSIService extends Service {
 	private static final String TAG = RSSIService.class.getSimpleName();
+	BluetoothGatt mBluetoothGatt;
 	
 	@Override
 	public IBinder onBind(Intent intent) {

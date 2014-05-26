@@ -12,7 +12,14 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
+	
+    <Button
+        android:id="@+id/buttonReadRSSI"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/buttonScan"
+        android:text="ReadRSSI" />
+    
     <Button
         android:id="@+id/buttonScan"
         android:layout_width="wrap_content"

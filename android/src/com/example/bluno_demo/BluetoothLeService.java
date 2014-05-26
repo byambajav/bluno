@@ -31,6 +31,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -52,7 +53,6 @@ public class BluetoothLeService extends Service {
 	private static final int STATE_CONNECTING = 1;
 	private static final int STATE_CONNECTED = 2;
 	public int mConnectionState = STATE_DISCONNECTED;
-
 
 	//To tell the onCharacteristicWrite call back function that this is a new characteristic, 
 	//not the Write Characteristic to the device successfully.
@@ -89,7 +89,13 @@ public class BluetoothLeService extends Service {
 	// connection change and services discovered.
 	private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
 		@Override
+		public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
+			Log.d("rssi_read", "RSSI" + rssi);
+	    }
+		
+		@Override
 		public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+			Log.d("rssi_read", "con change");
 			String intentAction;
 			System.out.println("BluetoothGattCallback----onConnectionStateChange"+newState);
 			if (newState == BluetoothProfile.STATE_CONNECTED) {
@@ -298,6 +304,11 @@ public class BluetoothLeService extends Service {
 			intent.putExtra(EXTRA_DATA, new String(data));
 			sendBroadcast(intent);
 		}
+	}
+	
+	public boolean readRemoteRSSI() {
+		Log.d("rssi_read", "RSSI try");
+		return mBluetoothGatt.readRemoteRssi();
 	}
 
 	public class LocalBinder extends Binder {
