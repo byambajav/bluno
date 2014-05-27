@@ -15,6 +15,11 @@
 -->
 <resources>
     <string name="app_name">まよわん</string>
+    
+    <!-- Mayowan items -->
+    <string name="distance_title">今2人の距離は</string>
+    
+    <!-- Bluetooth items -->
     <string name="ble_not_supported">BLEが対応していません</string>
     <string name="label_data">Data:</string>
     <string name="label_device_address">Device address:</string>
