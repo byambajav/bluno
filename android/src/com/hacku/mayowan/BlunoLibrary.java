@@ -264,7 +264,6 @@ public abstract  class BlunoLibrary extends Activity{
 						// Gets RSSI strength
 						int  rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
 						Log.i("debug","  RSSI: " + rssi + "dBm");
-						Toast.makeText(BlunoLibrary.this, "  RSSI: " + rssi + "dBm", Toast.LENGTH_LONG).show(); //
 
 						mConnected = true;
 						mHandler.removeCallbacks(mConnectingOverTimeRunnable);
@@ -280,9 +279,6 @@ public abstract  class BlunoLibrary extends Activity{
 							System.out.println("ACTION_GATT_SERVICES_DISCOVERED  "+
 									gattService.getUuid().toString());
 						}
-						int  rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
-						Log.i("rssi_discovered","  RSSI: " + rssi + "dBm");
-						Toast.makeText(BlunoLibrary.this, "  RSSI: " + rssi + "dBm", Toast.LENGTH_LONG).show(); //
 
 						getGattServices(mBluetoothLeService.getSupportedGattServices());
 					} else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {

@@ -54,6 +54,8 @@ public class MainActivity extends BlunoLibrary {
 		TextView distanceTextTitle = (TextView) findViewById(R.id.distanceTextTitle);
 		distanceTextTitle.setText(Html.fromHtml("<small>" + "だいたい " + "</small>" +  
 				"<big>" + "1m" + "</big>"));
+		
+		serialSendText = (EditText) findViewById(R.id.serialSendText); //initial the EditText of the sending data		
 
 		buttonSerialSend = (Button) findViewById(R.id.buttonSerialSend); //initial the button for sending the data
 		buttonSerialSend.setOnClickListener(new OnClickListener() {
@@ -61,9 +63,7 @@ public class MainActivity extends BlunoLibrary {
 			public void onClick(View v) {
 				serialSend(mPlainProtocol.write(BleCmd.Disp + serialSendText.getText(), 0,0));
 			}
-		});
-        
-		serialSendText=(EditText) findViewById(R.id.serialSendText); //initial the EditText of the sending data		
+		});      
 	}
 
 	protected void onResume(){
@@ -99,19 +99,19 @@ public class MainActivity extends BlunoLibrary {
 	public void onConnectionStateChange(connectionStateEnum theConnectionState) { //Once connection state changes, this function will be called
 		switch (theConnectionState) { //Four connection state
 		case isConnected:
-			buttonScan.setText("Connected");
+			buttonScan.setText(getString(R.string.connected));
 			break;
 		case isConnecting:
-			buttonScan.setText("Connecting");
+			buttonScan.setText(R.string.connecting);
 			break;
 		case isToScan:
-			buttonScan.setText("Scan");
+			buttonScan.setText(R.string.scan);
 			break;
 		case isScanning:
-			buttonScan.setText("Scanning");
+			buttonScan.setText(R.string.scanning);
 			break;
 		case isDisconnecting:
-			buttonScan.setText("isDisconnecting");
+			buttonScan.setText(R.string.disconnecting);
 			break;
 		default:
 			break;
@@ -121,7 +121,7 @@ public class MainActivity extends BlunoLibrary {
 	@Override
 	public void onSerialReceived(String theString) { //Once connection data received, this function will be called
 		// TODO Auto-generated method stub
-		serialReceivedText.append(theString + "\n"); //append the text into the EditText
+		//serialReceivedText.append(theString + "\n"); //append the text into the EditText
 		//The Serial data from the BLUNO may be sub-packaged, so using a buffer to hold the String is a good choice.					
 	}
 
