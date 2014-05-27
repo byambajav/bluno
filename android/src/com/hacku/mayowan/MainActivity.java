@@ -7,13 +7,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends BlunoLibrary {
 	private static final String TAG = MainActivity.class.getSimpleName();
@@ -23,6 +22,12 @@ public class MainActivity extends BlunoLibrary {
 	private EditText serialSendText;
 	private PlainProtocol mPlainProtocol= new PlainProtocol();
 
+	// MayowanUI components
+	private TextView mayowanDistance;
+	private ImageView mayowanPic;
+	private ImageView mayowanThumbnail;
+	private TextView mayowanMsg;
+
 	private int readRSSIInterval = 3000; // 3 seconds
 	private Handler mHandler;
 
@@ -31,8 +36,9 @@ public class MainActivity extends BlunoLibrary {
 		public void run() {
 			if (mConnectionState == connectionStateEnum.isConnected) {
 				mBluetoothLeService.readRemoteRSSI(); //this function can change value of mInterval.
-				Toast.makeText(MainActivity.this, "RSSI: " + mBluetoothLeService.currentRSSI,
-						Toast.LENGTH_LONG).show();
+				changeMayowanUI(mBluetoothLeService.currentRSSI);
+				/*Toast.makeText(MainActivity.this, "RSSI: " + mBluetoothLeService.currentRSSI,
+						Toast.LENGTH_LONG).show();*/
 			}
 			mHandler.postDelayed(rssiReader, readRSSIInterval);
 		}
@@ -46,18 +52,74 @@ public class MainActivity extends BlunoLibrary {
 		mHandler.removeCallbacks(rssiReader);
 	}
 
+	/**
+	 * Changes UI based on RSSI value.
+	 */
+	private void changeMayowanUI(int rssi){
+		int level;
+		if (rssi == 0) {
+			level = 0; // Not connected yet
+			mayowanDistance.setText(" ");
+			mayowanThumbnail.setImageDrawable(getResources().getDrawable(R.drawable.thumb0));
+			mayowanMsg.setText("          ");
+			mayowanPic.setVisibility(View.INVISIBLE);
+		}
+		else if (rssi > -40) {
+			level = 1; // あんしんだわん
+			mayowanDistance.setText(Html.fromHtml("<small>" + "だいたい " + "</small>" +  
+					"<big>" + "1m" + "</big>"));
+			mayowanThumbnail.setImageDrawable(getResources().getDrawable(R.drawable.thumb1));
+			mayowanMsg.setText("あんしんだわん!");
+			mayowanPic.setImageDrawable(getResources().getDrawable(R.drawable.img1));
+			mayowanPic.setVisibility(View.VISIBLE);
+		}
+		else if (rssi > -50) {
+			level = 2; // ちょうどいいわん
+			mayowanDistance.setText(Html.fromHtml("<small>" + "だいたい " + "</small>" +  
+					"<big>" + "3m" + "</big>"));
+			mayowanThumbnail.setImageDrawable(getResources().getDrawable(R.drawable.thumb2));
+			mayowanMsg.setText("ちょうどいいわん!");
+			mayowanPic.setImageDrawable(getResources().getDrawable(R.drawable.img2));
+			mayowanPic.setVisibility(View.VISIBLE);
+		}
+		else if (rssi > -60) {
+			level = 3; // きをつけるわん
+			mayowanDistance.setText(Html.fromHtml("<small>" + "だいたい " + "</small>" +  
+					"<big>" + "10m" + "</big>"));
+			mayowanThumbnail.setImageDrawable(getResources().getDrawable(R.drawable.thumb3));
+			mayowanMsg.setText("きをつけるわん!");
+			mayowanPic.setImageDrawable(getResources().getDrawable(R.drawable.img3));
+			mayowanPic.setVisibility(View.VISIBLE);
+		}
+		else {
+			level = 4; // はなれすぎわん
+			mayowanDistance.setText(Html.fromHtml("<small>" + "だいたい " + "</small>" +  
+					"<big>" + "50m" + "</big>"));
+			mayowanThumbnail.setImageDrawable(getResources().getDrawable(R.drawable.thumb4));
+			mayowanMsg.setText("はなれすぎわん!");
+			mayowanPic.setImageDrawable(getResources().getDrawable(R.drawable.img4));
+			mayowanPic.setVisibility(View.VISIBLE);
+		}
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		// Create handler to run rssiReader
 		mHandler = new Handler();
 		startRepeatingTask();
-		
+
 		// change color
 		ActionBar bar = getActionBar();
 		bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FF8800")));
+
+		// MayowanUI components
+		mayowanDistance = (TextView) findViewById(R.id.mayowan_distance);
+		mayowanPic = (ImageView) findViewById(R.id.mayowan_pic);
+		mayowanThumbnail = (ImageView) findViewById(R.id.mayowan_thumbnail);
+		mayowanMsg = (TextView) findViewById(R.id.mayowan_msg);
 
 		onCreateProcess(); //onCreate Process by BlunoLibrary
 
@@ -68,10 +130,6 @@ public class MainActivity extends BlunoLibrary {
 				buttonScanOnClickProcess(); //Alert Dialog for selecting the BLE device
 			}
 		});
-
-		TextView distanceTextTitle = (TextView) findViewById(R.id.distanceTextTitle);
-		distanceTextTitle.setText(Html.fromHtml("<small>" + "だいたい " + "</small>" +  
-				"<big>" + "1m" + "</big>"));
 
 		serialSendText = (EditText) findViewById(R.id.serialSendText); //initial the EditText of the sending data		
 
