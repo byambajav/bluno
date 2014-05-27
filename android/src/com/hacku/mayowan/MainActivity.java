@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends BlunoLibrary {
 	private static final String TAG = MainActivity.class.getSimpleName();
@@ -28,23 +30,11 @@ public class MainActivity extends BlunoLibrary {
 		
 		// change color
 		ActionBar bar = getActionBar();
-		bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FF8702")));
+		bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FF8800")));
 		
         onCreateProcess(); //onCreate Process by BlunoLibrary
-
-		serialReceivedText=(EditText) findViewById(R.id.serialReveicedText); //initial the EditText of the received data
-		serialSendText=(EditText) findViewById(R.id.serialSendText); //initial the EditText of the sending data
-
-		buttonSerialSend = (Button) findViewById(R.id.buttonSerialSend); //initial the button for sending the data
-		buttonSerialSend.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				serialSend(mPlainProtocol.write(BleCmd.Disp + serialSendText.getText(), 0,0));
-			}
-		});
-
-		buttonScan = (Button) findViewById(R.id.buttonScan); //initial the button for scanning the BLE device
+		
+        buttonScan = (Button) findViewById(R.id.buttonScan); //initial the button for scanning the BLE device
 		buttonScan.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -52,7 +42,7 @@ public class MainActivity extends BlunoLibrary {
 			}
 		});
 		
-		buttonReadRSSI = (Button) findViewById(R.id.buttonReadRSSI); //initial the button for scanning the BLE device
+        buttonReadRSSI = (Button) findViewById(R.id.buttonReadRSSI); //initial the button for scanning the BLE device
 		buttonReadRSSI.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -60,6 +50,20 @@ public class MainActivity extends BlunoLibrary {
 				Log.d("rssi_read", "Try: " + rssi);
 			}
 		});
+
+		TextView distanceTextTitle = (TextView) findViewById(R.id.distanceTextTitle);
+		distanceTextTitle.setText(Html.fromHtml("<small>" + "だいたい " + "</small>" +  
+				"<big>" + "1m" + "</big>"));
+
+		buttonSerialSend = (Button) findViewById(R.id.buttonSerialSend); //initial the button for sending the data
+		buttonSerialSend.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				serialSend(mPlainProtocol.write(BleCmd.Disp + serialSendText.getText(), 0,0));
+			}
+		});
+        
+		serialSendText=(EditText) findViewById(R.id.serialSendText); //initial the EditText of the sending data		
 	}
 
 	protected void onResume(){
