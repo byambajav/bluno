@@ -1,4 +1,4 @@
-package com.example.bluno_demo;
+package com.hacku.mayowan;
 
 @SuppressWarnings("unchecked")
 public class RingBuffer<T> {

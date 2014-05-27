@@ -1,4 +1,4 @@
-package com.example.bluno_demo;
+package com.hacku.mayowan;
 
 public class BleCmd {
 	//define the command string for plain protocol

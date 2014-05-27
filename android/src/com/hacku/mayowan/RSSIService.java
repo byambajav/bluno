@@ -1,4 +1,4 @@
-package com.example.bluno_demo;
+package com.hacku.mayowan;
 
 import android.app.Service;
 import android.bluetooth.BluetoothGatt;
