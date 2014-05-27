@@ -90,6 +90,7 @@ public class BluetoothLeService extends Service {
 	private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
 		@Override
 		public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
+			currentRSSI = rssi;
 			Log.d("rssi_read", "RSSI" + rssi);
 	    }
 		
@@ -305,6 +306,8 @@ public class BluetoothLeService extends Service {
 			sendBroadcast(intent);
 		}
 	}
+	
+	public int currentRSSI = 0;
 	
 	public boolean readRemoteRSSI() {
 		Log.d("rssi_read", "RSSI try");

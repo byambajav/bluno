@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -12,49 +13,66 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends BlunoLibrary {
 	private static final String TAG = MainActivity.class.getSimpleName();
-	
+
 	private Button buttonScan;
-	private Button buttonReadRSSI;
 	private Button buttonSerialSend;
 	private EditText serialSendText;
-	private EditText serialReceivedText;
 	private PlainProtocol mPlainProtocol= new PlainProtocol();
+
+	private int readRSSIInterval = 3000; // 3 seconds
+	private Handler mHandler;
+
+	Runnable rssiReader = new Runnable() {
+		@Override 
+		public void run() {
+			if (mConnectionState == connectionStateEnum.isConnected) {
+				mBluetoothLeService.readRemoteRSSI(); //this function can change value of mInterval.
+				Toast.makeText(MainActivity.this, "RSSI: " + mBluetoothLeService.currentRSSI,
+						Toast.LENGTH_LONG).show();
+			}
+			mHandler.postDelayed(rssiReader, readRSSIInterval);
+		}
+	};
+
+	void startRepeatingTask() {
+		rssiReader.run(); 
+	}
+
+	void stopRepeatingTask() {
+		mHandler.removeCallbacks(rssiReader);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		// Create handler to run rssiReader
+		mHandler = new Handler();
+		startRepeatingTask();
+		
 		// change color
 		ActionBar bar = getActionBar();
 		bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FF8800")));
-		
-        onCreateProcess(); //onCreate Process by BlunoLibrary
-		
-        buttonScan = (Button) findViewById(R.id.buttonScan); //initial the button for scanning the BLE device
+
+		onCreateProcess(); //onCreate Process by BlunoLibrary
+
+		buttonScan = (Button) findViewById(R.id.buttonScan); //initial the button for scanning the BLE device
 		buttonScan.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				buttonScanOnClickProcess(); //Alert Dialog for selecting the BLE device
 			}
 		});
-		
-        buttonReadRSSI = (Button) findViewById(R.id.buttonReadRSSI); //initial the button for scanning the BLE device
-		buttonReadRSSI.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				boolean rssi = mBluetoothLeService.readRemoteRSSI();
-				Log.d("rssi_read", "Try: " + rssi);
-			}
-		});
 
 		TextView distanceTextTitle = (TextView) findViewById(R.id.distanceTextTitle);
 		distanceTextTitle.setText(Html.fromHtml("<small>" + "だいたい " + "</small>" +  
 				"<big>" + "1m" + "</big>"));
-		
+
 		serialSendText = (EditText) findViewById(R.id.serialSendText); //initial the EditText of the sending data		
 
 		buttonSerialSend = (Button) findViewById(R.id.buttonSerialSend); //initial the button for sending the data

@@ -19,16 +19,11 @@
             android:id="@+id/buttonScan"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
             android:background="@drawable/rounded_strongorange"
             android:text="@string/scan"
             android:textColor="@color/textwhite" />
 
-        <Button
-            android:id="@+id/buttonReadRSSI"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ReadRSSI" />
-        
         <TextView
             android:id="@+id/distanceTextLabel"
             android:layout_width="match_parent"
