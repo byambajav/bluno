@@ -33,6 +33,8 @@ int knob=0;                 //knob(potentiometer) value read from analog pin
 
 int joyStick=0;             //joystick state
 
+String distance="-1";
+
 void setup() {
   myAccessory.begin();
   myBLUNO.init();
@@ -45,9 +47,9 @@ void draw (void)
   myOled.setFont(u8g_font_unifont);
 
   myOled.setPrintPos(10,16);      //set the print position
-  myOled.print("H:");
-  myOled.print(humidity);         //show the humidity on oled
-  myOled.print("%");
+  myOled.print("Dist:");
+  myOled.print(distance);         //show the humidity on oled
+  myOled.print("m");
 
   myOled.setPrintPos(10,32);
   myOled.print("T:");             //show the temperature on oled
@@ -130,6 +132,34 @@ void loop()
     else if(myBLUNO.equals("KNOB")){    //if the command name is "KNOB"
       myBLUNO.write("KNOB", myAccessory.readKnob());  //return the value of the knob(potentiometer) to mobile device
     }
+    else if(myBLUNO.equals("DIST")){
+      distance = myBLUNO.readString();
+      if (distance == "0") {
+        ledRed=0;
+        ledGreen=255;
+        ledBlue=0;
+        myAccessory.setBuzzer(0);
+      }
+      else if (distance == "1" || distance == "3") {
+        ledRed=0;
+        ledGreen=0;
+        ledBlue=255;
+        myAccessory.setBuzzer(0);
+      }
+      else if (distance == "10") {
+        ledRed=255;
+        ledGreen=0;
+        ledBlue=0;
+        myAccessory.setBuzzer(0);
+      }
+      else if (distance == "50") {
+        ledRed=255;
+        ledGreen=0;
+        ledBlue=0;
+        myAccessory.setBuzzer(1);
+      }
+      myAccessory.setRGBLed(ledRed/5, ledGreen/5, ledBlue/5);   //set the color to the RGBLED
+    }
     myBLUNO.write("hello");               
   }
 
@@ -164,6 +194,8 @@ void loop()
   }
 
 }
+
+
 
 
 

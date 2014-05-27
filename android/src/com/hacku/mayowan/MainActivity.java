@@ -40,6 +40,10 @@ public class MainActivity extends BlunoLibrary {
 				/*Toast.makeText(MainActivity.this, "RSSI: " + mBluetoothLeService.currentRSSI,
 						Toast.LENGTH_LONG).show();*/
 			}
+			else {
+				mBluetoothLeService.currentRSSI = 0;
+			}
+			
 			mHandler.postDelayed(rssiReader, readRSSIInterval);
 		}
 	};
@@ -56,16 +60,16 @@ public class MainActivity extends BlunoLibrary {
 	 * Changes UI based on RSSI value.
 	 */
 	private void changeMayowanUI(int rssi){
-		int level;
+		int distance;
 		if (rssi == 0) {
-			level = 0; // Not connected yet
+			distance = 0; // Not connected yet
 			mayowanDistance.setText(" ");
 			mayowanThumbnail.setImageDrawable(getResources().getDrawable(R.drawable.thumb0));
 			mayowanMsg.setText("          ");
 			mayowanPic.setVisibility(View.INVISIBLE);
 		}
 		else if (rssi > -40) {
-			level = 1; // あんしんだわん
+			distance = 1; // あんしんだわん
 			mayowanDistance.setText(Html.fromHtml("<small>" + "だいたい " + "</small>" +  
 					"<big>" + "1m" + "</big>"));
 			mayowanThumbnail.setImageDrawable(getResources().getDrawable(R.drawable.thumb1));
@@ -74,7 +78,7 @@ public class MainActivity extends BlunoLibrary {
 			mayowanPic.setVisibility(View.VISIBLE);
 		}
 		else if (rssi > -50) {
-			level = 2; // ちょうどいいわん
+			distance = 3; // ちょうどいいわん
 			mayowanDistance.setText(Html.fromHtml("<small>" + "だいたい " + "</small>" +  
 					"<big>" + "3m" + "</big>"));
 			mayowanThumbnail.setImageDrawable(getResources().getDrawable(R.drawable.thumb2));
@@ -83,7 +87,7 @@ public class MainActivity extends BlunoLibrary {
 			mayowanPic.setVisibility(View.VISIBLE);
 		}
 		else if (rssi > -60) {
-			level = 3; // きをつけるわん
+			distance = 10; // きをつけるわん
 			mayowanDistance.setText(Html.fromHtml("<small>" + "だいたい " + "</small>" +  
 					"<big>" + "10m" + "</big>"));
 			mayowanThumbnail.setImageDrawable(getResources().getDrawable(R.drawable.thumb3));
@@ -92,7 +96,7 @@ public class MainActivity extends BlunoLibrary {
 			mayowanPic.setVisibility(View.VISIBLE);
 		}
 		else {
-			level = 4; // はなれすぎわん
+			distance = 50; // はなれすぎわん
 			mayowanDistance.setText(Html.fromHtml("<small>" + "だいたい " + "</small>" +  
 					"<big>" + "50m" + "</big>"));
 			mayowanThumbnail.setImageDrawable(getResources().getDrawable(R.drawable.thumb4));
@@ -100,6 +104,9 @@ public class MainActivity extends BlunoLibrary {
 			mayowanPic.setImageDrawable(getResources().getDrawable(R.drawable.img4));
 			mayowanPic.setVisibility(View.VISIBLE);
 		}
+
+		// Send rssi data 
+		serialSend(mPlainProtocol.write(BleCmd.Distance + distance, 0, 0));
 	}
 
 	@Override
