@@ -1,7 +1,10 @@
 package com.hacku.mayowan;
 
-import android.os.Bundle;
+import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,8 +25,12 @@ public class MainActivity extends BlunoLibrary {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		onCreateProcess(); //onCreate Process by BlunoLibrary
+		
+		// change color
+		ActionBar bar = getActionBar();
+		bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FF8702")));
+		
+        onCreateProcess(); //onCreate Process by BlunoLibrary
 
 		serialReceivedText=(EditText) findViewById(R.id.serialReveicedText); //initial the EditText of the received data
 		serialSendText=(EditText) findViewById(R.id.serialSendText); //initial the EditText of the sending data
