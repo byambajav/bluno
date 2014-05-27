@@ -40,7 +40,7 @@ public class MainActivity extends BlunoLibrary {
 				/*Toast.makeText(MainActivity.this, "RSSI: " + mBluetoothLeService.currentRSSI,
 						Toast.LENGTH_LONG).show();*/
 			}
-			else {
+			else if (mBluetoothLeService != null){
 				mBluetoothLeService.currentRSSI = 0;
 			}
 			
