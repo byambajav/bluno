@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends BlunoLibrary {
 	private static final String TAG = MainActivity.class.getSimpleName();
@@ -28,7 +29,7 @@ public class MainActivity extends BlunoLibrary {
 	private ImageView mayowanThumbnail;
 	private TextView mayowanMsg;
 
-	private int readRSSIInterval = 3000; // 3 seconds
+	private int readRSSIInterval = 1000; // 1 seconds
 	private Handler mHandler;
 
 	Runnable rssiReader = new Runnable() {
@@ -140,7 +141,7 @@ public class MainActivity extends BlunoLibrary {
 		buttonSerialSend.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				serialSend(mPlainProtocol.write(BleCmd.Disp + serialSendText.getText(), 0,0));
+				serialSend(mPlainProtocol.write(BleCmd.Disp + "[" + serialSendText.getText() + "]", 0,0));
 			}
 		});      
 	}
@@ -200,7 +201,7 @@ public class MainActivity extends BlunoLibrary {
 	@Override
 	public void onSerialReceived(String theString) { //Once connection data received, this function will be called
 		// TODO Auto-generated method stub
-		//serialReceivedText.append(theString + "\n"); //append the text into the EditText
+		Toast.makeText(MainActivity.this, theString, Toast.LENGTH_SHORT).show();
 		//The Serial data from the BLUNO may be sub-packaged, so using a buffer to hold the String is a good choice.					
 	}
 
