@@ -43,7 +43,7 @@ public class MainActivity extends BlunoLibrary {
 			else if (mBluetoothLeService != null){
 				mBluetoothLeService.currentRSSI = 0;
 			}
-			
+
 			mHandler.postDelayed(rssiReader, readRSSIInterval);
 		}
 	};
@@ -63,10 +63,10 @@ public class MainActivity extends BlunoLibrary {
 		int distance;
 		if (rssi == 0) {
 			distance = 0; // Not connected yet
-			mayowanDistance.setText(" ");
+			mayowanDistance.setText(Html.fromHtml("<big>" + "わからない" + "</big>"));
 			mayowanThumbnail.setImageDrawable(getResources().getDrawable(R.drawable.thumb0));
-			mayowanMsg.setText("          ");
-			mayowanPic.setVisibility(View.INVISIBLE);
+			mayowanMsg.setText("通信できないわん!");
+			mayowanPic.setImageDrawable(getResources().getDrawable(R.drawable.img0));
 		}
 		else if (rssi > -40) {
 			distance = 1; // あんしんだわん
@@ -75,7 +75,6 @@ public class MainActivity extends BlunoLibrary {
 			mayowanThumbnail.setImageDrawable(getResources().getDrawable(R.drawable.thumb1));
 			mayowanMsg.setText("あんしんだわん!");
 			mayowanPic.setImageDrawable(getResources().getDrawable(R.drawable.img1));
-			mayowanPic.setVisibility(View.VISIBLE);
 		}
 		else if (rssi > -50) {
 			distance = 3; // ちょうどいいわん
@@ -84,7 +83,6 @@ public class MainActivity extends BlunoLibrary {
 			mayowanThumbnail.setImageDrawable(getResources().getDrawable(R.drawable.thumb2));
 			mayowanMsg.setText("ちょうどいいわん!");
 			mayowanPic.setImageDrawable(getResources().getDrawable(R.drawable.img2));
-			mayowanPic.setVisibility(View.VISIBLE);
 		}
 		else if (rssi > -60) {
 			distance = 10; // きをつけるわん
@@ -93,7 +91,6 @@ public class MainActivity extends BlunoLibrary {
 			mayowanThumbnail.setImageDrawable(getResources().getDrawable(R.drawable.thumb3));
 			mayowanMsg.setText("きをつけるわん!");
 			mayowanPic.setImageDrawable(getResources().getDrawable(R.drawable.img3));
-			mayowanPic.setVisibility(View.VISIBLE);
 		}
 		else {
 			distance = 50; // はなれすぎわん
@@ -102,7 +99,6 @@ public class MainActivity extends BlunoLibrary {
 			mayowanThumbnail.setImageDrawable(getResources().getDrawable(R.drawable.thumb4));
 			mayowanMsg.setText("はなれすぎわん!");
 			mayowanPic.setImageDrawable(getResources().getDrawable(R.drawable.img4));
-			mayowanPic.setVisibility(View.VISIBLE);
 		}
 
 		// Send rssi data 
