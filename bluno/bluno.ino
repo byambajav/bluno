@@ -28,7 +28,7 @@ int ledBlue=0;              //RGBLED blue value
 
 int joyStick=0;             //joystick state
 
-String distance="-1";
+String distance="0";
 
 void setup() {
   myAccessory.begin();
@@ -40,7 +40,7 @@ void setup() {
 
 void draw (void)
 {
-  if (distance == "-1") {
+  if (distance == "0") {
     time_t t = now();
 
     myOled.setFont(u8g_font_fur20);
@@ -51,26 +51,35 @@ void draw (void)
     myOled.print(":");
     myOled.print(second(t));
   }
-  else if (oledDisplay.length()){
+  else if (distance == "-1"){
     myOled.setFont(u8g_font_unifont);
-    myOled.setPrintPos(30,16);
-    myOled.print(distance);
-    myOled.print("m");
+    myOled.setPrintPos(36,16);
+    myOled.print("(x_x)");
 
     myOled.setFont(u8g_font_fur20);
-    myOled.setPrintPos(10,50);
+    myOled.setPrintPos(0,50);
+    myOled.print("sugu iku");
+  }
+  else if (oledDisplay.length()){
+    myOled.setFont(u8g_font_unifont);
+    myOled.setPrintPos(40,16);
+    myOled.print(distance);
+    myOled.print(" m");
+
+    myOled.setFont(u8g_font_fur20);
+    myOled.setPrintPos(0,50);
     myOled.print(oledDisplay);
   }
   else { 
     myOled.setFont(u8g_font_fur20);
-    myOled.setPrintPos(30,44);
+    myOled.setPrintPos(36,44);
     myOled.print(distance);
-    myOled.print("m");
+    myOled.print(" m");
   }
 }
 
 void setLED () {
-  if (distance == "-1") {
+  if (distance == "0") {
     ledRed=255;
     ledGreen=0;
     ledBlue=255;
@@ -100,15 +109,22 @@ void setLED () {
     ledBlue=0;
     myAccessory.setBuzzer(1);
   }
+  else if (distance == "-1") {
+    ledRed=255;
+    ledGreen=0;
+    ledBlue=0;
+    myAccessory.setBuzzer(0);
+  }
   myAccessory.setRGBLed(ledRed/5, ledGreen/5, ledBlue/5);   //set the color to the RGBLED
 }
 
 void loop()
 {
-  Serial.print(myBLUNO.read());
+  static unsigned long connTimer=millis();
   if (myBLUNO.available()) {    //receive valid command
+    connTimer=millis();
     Serial.print(myBLUNO.read());
-    if (myBLUNO.equals("DISP")){       //if the command name is "DISP"
+    if (myBLUNO.equals("DISP")){
       oledDisplay=myBLUNO.readString();   //read the string to local value
     }
     else if(myBLUNO.equals("DIST")){
@@ -116,11 +132,16 @@ void loop()
       oledDisplay = "";
     }             
   }
+  else if (millis() - connTimer >= 5000) {
+    if (distance != "0") {
+      distance = "-1";
+    }
+  }
 
   setLED(); // Sets LED color based on distance 
 
-  static unsigned long oledTimer=millis();        //every 200ms update the oled display
-  if (millis() - oledTimer >= 200) {
+  static unsigned long oledTimer=millis();        //every 500ms update the oled display
+  if (millis() - oledTimer >= 500) {
     oledTimer=millis();
     myOled.firstPage();                         //for more information about the U8glib library, go to https://code.google.com/p/u8glib/
     do{
@@ -131,10 +152,12 @@ void loop()
 
   if (myAccessory.joystickAvailable()) {          //if the state of joystick is changed
     joyStick=myAccessory.readJoystick();        //update the joystick
-    myBLUNO.write("ROCKER", joyStick);          //send the command and value to mobile device
+    myBLUNO.write("ROCKER", joystick);          //send the command and value to mobile device
   }
 
 }
+
+
 
 
 

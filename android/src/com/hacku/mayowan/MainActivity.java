@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -41,10 +42,12 @@ public class MainActivity extends BlunoLibrary {
 				/*Toast.makeText(MainActivity.this, "RSSI: " + mBluetoothLeService.currentRSSI,
 						Toast.LENGTH_LONG).show();*/
 			}
-			else if (mBluetoothLeService != null){
-				mBluetoothLeService.currentRSSI = 0;
+			else{ 
+				if (mBluetoothLeService != null){
+					mBluetoothLeService.currentRSSI = 0;
+				}
+				changeMayowanUI(0);
 			}
-
 			mHandler.postDelayed(rssiReader, readRSSIInterval);
 		}
 	};
@@ -77,15 +80,15 @@ public class MainActivity extends BlunoLibrary {
 			mayowanMsg.setText("あんしんだわん!");
 			mayowanPic.setImageDrawable(getResources().getDrawable(R.drawable.img1));
 		}
-		else if (rssi > -50) {
-			distance = 3; // ちょうどいいわん
+		else if (rssi > -60) {
+			distance = 5; // ちょうどいいわん
 			mayowanDistance.setText(Html.fromHtml("<small>" + "だいたい " + "</small>" +  
-					"<big>" + "3m" + "</big>"));
+					"<big>" + "5m" + "</big>"));
 			mayowanThumbnail.setImageDrawable(getResources().getDrawable(R.drawable.thumb2));
 			mayowanMsg.setText("ちょうどいいわん!");
 			mayowanPic.setImageDrawable(getResources().getDrawable(R.drawable.img2));
 		}
-		else if (rssi > -60) {
+		else if (rssi > -75) {
 			distance = 10; // きをつけるわん
 			mayowanDistance.setText(Html.fromHtml("<small>" + "だいたい " + "</small>" +  
 					"<big>" + "10m" + "</big>"));
@@ -200,8 +203,39 @@ public class MainActivity extends BlunoLibrary {
 
 	@Override
 	public void onSerialReceived(String theString) { //Once connection data received, this function will be called
-		// TODO Auto-generated method stub
-		Toast.makeText(MainActivity.this, theString, Toast.LENGTH_SHORT).show();
+		//Toast.makeText(MainActivity.this, theString, Toast.LENGTH_SHORT).show();
+		mPlainProtocol.mReceivedframe.append(theString);
+		Log.d(TAG, mPlainProtocol.mReceivedframe.toString());
+		while(mPlainProtocol.available())
+		{
+			if(mPlainProtocol.receivedCommand.equals(BleCmd.Rocker))
+			{
+				Toast.makeText(MainActivity.this, "Rocker", Toast.LENGTH_SHORT).show();
+				/*switch(mPlainProtocol.receivedContent[0]){
+	        	case 0:	//None input
+	        		arduinoinputdispArea.setImageResource(R.drawable.inputbutton_none);
+	        		break;
+	        	case 1:	//center button pressed 
+	        		arduinoinputdispArea.setImageResource(R.drawable.inputbutton_right);
+	        		break;
+	        	case 2:	//up button pressed 
+	        		arduinoinputdispArea.setImageResource(R.drawable.inputbutton_up);
+	        		break;
+	        	case 3:	//left button pressed 
+	        		arduinoinputdispArea.setImageResource(R.drawable.inputbutton_left);
+	        		break;
+	        	case 4:	//down button pressed 
+	        		arduinoinputdispArea.setImageResource(R.drawable.inputbutton_down);
+	        		break;
+	        	case 5:	//right button pressed 
+	        		arduinoinputdispArea.setImageResource(R.drawable.inputbutton_center);
+	        		break;
+	        	default:
+	        		Log.e(getLocalClassName(), "Unkown joystick state: " + mPlainProtocol.receivedContent[0]);
+	        		break;
+	        	}*/
+			}
+		}
 		//The Serial data from the BLUNO may be sub-packaged, so using a buffer to hold the String is a good choice.					
 	}
 
