@@ -10,7 +10,5 @@ public class BleCmd {
 	public static final String Temperature = "TEMP";
 	public static final String Humidity = "HUMID";
 	public static final String Knob = "KNOB";
-	public static final String Car = "CAR";
-	public static final String Sit = "SIT";
 	public static final String Distance = "DIST";
 }

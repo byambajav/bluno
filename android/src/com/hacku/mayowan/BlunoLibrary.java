@@ -261,7 +261,7 @@ public abstract  class BlunoLibrary extends Activity{
 					final String action = intent.getAction();
 					System.out.println("mGattUpdateReceiver->onReceive->action="+action);
 					if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
-						
+
 						mConnected = true;
 						mHandler.removeCallbacks(mConnectingOverTimeRunnable);
 					} else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {

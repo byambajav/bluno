@@ -16,6 +16,9 @@
 
 package com.hacku.mayowan;
 
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -31,10 +34,6 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
-
-import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 
 /**
@@ -92,8 +91,8 @@ public class BluetoothLeService extends Service {
 		public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
 			currentRSSI = rssi;
 			Log.d("rssi_read", "RSSI" + rssi);
-	    }
-		
+		}
+
 		@Override
 		public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
 			Log.d("rssi_read", "con change");
@@ -306,9 +305,9 @@ public class BluetoothLeService extends Service {
 			sendBroadcast(intent);
 		}
 	}
-	
+
 	public int currentRSSI = 0;
-	
+
 	public boolean readRemoteRSSI() {
 		Log.d("rssi_read", "RSSI try");
 		return mBluetoothGatt.readRemoteRssi();

@@ -40,7 +40,7 @@ void setup() {
 
 void draw (void)
 {
-  if (distance == "0") {
+  if (distance == "0") { // initial state, show clock
     time_t t = now();
 
     myOled.setFont(u8g_font_fur20);
@@ -51,7 +51,7 @@ void draw (void)
     myOled.print(":");
     myOled.print(second(t));
   }
-  else if (distance == "-1"){
+  else if (distance == "-1"){ // disconnected
     myOled.setFont(u8g_font_unifont);
     myOled.setPrintPos(36,16);
     myOled.print("(x_x)");
@@ -60,7 +60,7 @@ void draw (void)
     myOled.setPrintPos(0,50);
     myOled.print("sugu iku");
   }
-  else if (oledDisplay.length()){
+  else if (oledDisplay.length()){ // show distance and received msg
     myOled.setFont(u8g_font_unifont);
     myOled.setPrintPos(40,16);
     myOled.print(distance);
@@ -70,7 +70,7 @@ void draw (void)
     myOled.setPrintPos(0,50);
     myOled.print(oledDisplay);
   }
-  else { 
+  else { // show distance
     myOled.setFont(u8g_font_fur20);
     myOled.setPrintPos(36,44);
     myOled.print(distance);
@@ -115,7 +115,7 @@ void setLED () {
     ledBlue=0;
     myAccessory.setBuzzer(0);
   }
-  myAccessory.setRGBLed(ledRed/5, ledGreen/5, ledBlue/5);   //set the color to the RGBLED
+  myAccessory.setRGBLed(ledRed/3, ledGreen/3, ledBlue/3);   //set the color to the RGBLED
 }
 
 void loop()
@@ -125,7 +125,7 @@ void loop()
     connTimer=millis();
     Serial.print(myBLUNO.read());
     if (myBLUNO.equals("DISP")){
-      oledDisplay=myBLUNO.readString();   //read the string to local value
+      oledDisplay=myBLUNO.readString();
     }
     else if(myBLUNO.equals("DIST")){
       distance = myBLUNO.readString();
@@ -151,7 +151,7 @@ void loop()
   }
 
   if (myAccessory.joystickAvailable()) {          //if the state of joystick is changed
-    joyStick=myAccessory.readJoystick();        //update the joystick
+    joyStick=myAccessory.readJoystick();
     if (joyStick != 0) {
       myBLUNO.write("ROCKER", joyStick);          //send the command and value to mobile device
     }
