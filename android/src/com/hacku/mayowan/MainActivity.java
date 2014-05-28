@@ -1,6 +1,8 @@
 package com.hacku.mayowan;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -39,14 +41,9 @@ public class MainActivity extends BlunoLibrary {
 			if (mConnectionState == connectionStateEnum.isConnected) {
 				mBluetoothLeService.readRemoteRSSI(); //this function can change value of mInterval.
 				changeMayowanUI(mBluetoothLeService.currentRSSI);
-				/*Toast.makeText(MainActivity.this, "RSSI: " + mBluetoothLeService.currentRSSI,
-						Toast.LENGTH_LONG).show();*/
 			}
-			else{ 
-				if (mBluetoothLeService != null){
-					mBluetoothLeService.currentRSSI = 0;
-				}
-				changeMayowanUI(0);
+			else if (mBluetoothLeService != null) { 
+				mBluetoothLeService.currentRSSI = 0;
 			}
 			mHandler.postDelayed(rssiReader, readRSSIInterval);
 		}
@@ -135,6 +132,7 @@ public class MainActivity extends BlunoLibrary {
 			@Override
 			public void onClick(View v) {
 				buttonScanOnClickProcess(); //Alert Dialog for selecting the BLE device
+				changeMayowanUI(0);
 			}
 		});
 
@@ -201,6 +199,7 @@ public class MainActivity extends BlunoLibrary {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onSerialReceived(String theString) { //Once connection data received, this function will be called
 		//Toast.makeText(MainActivity.this, theString, Toast.LENGTH_SHORT).show();
@@ -210,30 +209,35 @@ public class MainActivity extends BlunoLibrary {
 		{
 			if(mPlainProtocol.receivedCommand.equals(BleCmd.Rocker))
 			{
-				Toast.makeText(MainActivity.this, "Rocker", Toast.LENGTH_SHORT).show();
-				/*switch(mPlainProtocol.receivedContent[0]){
-	        	case 0:	//None input
-	        		arduinoinputdispArea.setImageResource(R.drawable.inputbutton_none);
+				AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+				alertDialog.setTitle("メッセージ");
+				String msg = "";
+				switch(mPlainProtocol.receivedContent[0]){
+				case 0: 
+	        		msg = "nanda";	
 	        		break;
-	        	case 1:	//center button pressed 
-	        		arduinoinputdispArea.setImageResource(R.drawable.inputbutton_right);
+	        	case 1:	//left button pressed 
+	        		msg = "あいたい";
 	        		break;
 	        	case 2:	//up button pressed 
-	        		arduinoinputdispArea.setImageResource(R.drawable.inputbutton_up);
+	        		msg = "どこにいるの?";
 	        		break;
 	        	case 3:	//left button pressed 
-	        		arduinoinputdispArea.setImageResource(R.drawable.inputbutton_left);
+	        		msg = "ねむい";
 	        		break;
-	        	case 4:	//down button pressed 
-	        		arduinoinputdispArea.setImageResource(R.drawable.inputbutton_down);
-	        		break;
-	        	case 5:	//right button pressed 
-	        		arduinoinputdispArea.setImageResource(R.drawable.inputbutton_center);
+	        	case 4:	//right button pressed 
+	        		msg = "かえりたい";
 	        		break;
 	        	default:
-	        		Log.e(getLocalClassName(), "Unkown joystick state: " + mPlainProtocol.receivedContent[0]);
 	        		break;
-	        	}*/
+	        	}
+				alertDialog.setMessage(msg);
+				alertDialog.setIcon(android.R.drawable.ic_dialog_info);
+				alertDialog.setButton("はい", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+					}
+				});
+				alertDialog.show();
 			}
 		}
 		//The Serial data from the BLUNO may be sub-packaged, so using a buffer to hold the String is a good choice.					

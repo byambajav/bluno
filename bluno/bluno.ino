@@ -152,10 +152,13 @@ void loop()
 
   if (myAccessory.joystickAvailable()) {          //if the state of joystick is changed
     joyStick=myAccessory.readJoystick();        //update the joystick
-    myBLUNO.write("ROCKER", joystick);          //send the command and value to mobile device
+    if (joyStick != 0) {
+      myBLUNO.write("ROCKER", joyStick);          //send the command and value to mobile device
+    }
   }
 
 }
+
 
 
 
