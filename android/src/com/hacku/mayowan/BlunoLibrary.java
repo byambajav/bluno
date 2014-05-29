@@ -482,7 +482,7 @@ public abstract  class BlunoLibrary extends Activity{
 				}
 
 				public void addDevice(BluetoothDevice device) {
-					if (!mLeDevices.contains(device)) {
+					if (!mLeDevices.contains(device) && device.getName() != null && device.getName().equals("BlunoV1.8")) {
 						mLeDevices.add(device);
 					}
 				}

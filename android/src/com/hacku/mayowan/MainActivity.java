@@ -84,7 +84,7 @@ public class MainActivity extends BlunoLibrary {
 			mayowanMsg.setText("ちょうどいいわん!");
 			mayowanPic.setImageDrawable(getResources().getDrawable(R.drawable.img2));
 		}
-		else if (rssi >= -82) {
+		else if (rssi >= -75) {
 			distance = 30; // きをつけるわん
 			mayowanDistance.setText(Html.fromHtml("<small>" + "だいたい " + "</small>" +  
 					"<big>" + distance + "m" + "</big>"));

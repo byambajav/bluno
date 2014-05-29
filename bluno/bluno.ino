@@ -91,13 +91,13 @@ void setLED () {
     ledBlue=255;
     myAccessory.setBuzzer(0);
   }
-  else if (distance == "3") {
+  else if (distance == "10") {
     ledRed=0;
     ledGreen=255;
     ledBlue=0;
     myAccessory.setBuzzer(0);
   }
-  else if (distance == "10") {
+  else if (distance == "30") {
     ledRed=255;
     ledGreen=255;
     ledBlue=0;
