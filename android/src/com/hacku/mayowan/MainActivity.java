@@ -68,26 +68,26 @@ public class MainActivity extends BlunoLibrary {
 			mayowanMsg.setText("通信できないわん!");
 			mayowanPic.setImageDrawable(getResources().getDrawable(R.drawable.img0));
 		}
-		else if (rssi > -40) {
+		else if (rssi >= -40) {
 			distance = 1; // あんしんだわん
 			mayowanDistance.setText(Html.fromHtml("<small>" + "だいたい " + "</small>" +  
-					"<big>" + "1m" + "</big>"));
+					"<big>" + distance + "m" + "</big>"));
 			mayowanThumbnail.setImageDrawable(getResources().getDrawable(R.drawable.thumb1));
 			mayowanMsg.setText("あんしんだわん!");
 			mayowanPic.setImageDrawable(getResources().getDrawable(R.drawable.img1));
 		}
-		else if (rssi > -60) {
-			distance = 5; // ちょうどいいわん
+		else if (rssi >= -60) {
+			distance = 10; // ちょうどいいわん
 			mayowanDistance.setText(Html.fromHtml("<small>" + "だいたい " + "</small>" +  
-					"<big>" + "5m" + "</big>"));
+					"<big>" + distance + "m" + "</big>"));
 			mayowanThumbnail.setImageDrawable(getResources().getDrawable(R.drawable.thumb2));
 			mayowanMsg.setText("ちょうどいいわん!");
 			mayowanPic.setImageDrawable(getResources().getDrawable(R.drawable.img2));
 		}
-		else if (rssi > -75) {
-			distance = 10; // きをつけるわん
+		else if (rssi >= -82) {
+			distance = 30; // きをつけるわん
 			mayowanDistance.setText(Html.fromHtml("<small>" + "だいたい " + "</small>" +  
-					"<big>" + "10m" + "</big>"));
+					"<big>" + distance + "m" + "</big>"));
 			mayowanThumbnail.setImageDrawable(getResources().getDrawable(R.drawable.thumb3));
 			mayowanMsg.setText("きをつけるわん!");
 			mayowanPic.setImageDrawable(getResources().getDrawable(R.drawable.img3));
@@ -95,7 +95,7 @@ public class MainActivity extends BlunoLibrary {
 		else {
 			distance = 50; // はなれすぎわん
 			mayowanDistance.setText(Html.fromHtml("<small>" + "だいたい " + "</small>" +  
-					"<big>" + "50m" + "</big>"));
+					"<big>" + distance + "m" + "</big>"));
 			mayowanThumbnail.setImageDrawable(getResources().getDrawable(R.drawable.thumb4));
 			mayowanMsg.setText("はなれすぎわん!");
 			mayowanPic.setImageDrawable(getResources().getDrawable(R.drawable.img4));
@@ -213,23 +213,23 @@ public class MainActivity extends BlunoLibrary {
 				String msg = "";
 				switch(mPlainProtocol.receivedContent[0]){
 				case 0: 
-	        		msg = "nanda";	
-	        		break;
-	        	case 1:	//left button pressed 
-	        		msg = "あいたい";
-	        		break;
-	        	case 2:	//up button pressed 
-	        		msg = "どこにいるの?";
-	        		break;
-	        	case 3:	//left button pressed 
-	        		msg = "ねむい";
-	        		break;
-	        	case 4:	//right button pressed 
-	        		msg = "かえりたい";
-	        		break;
-	        	default:
-	        		break;
-	        	}
+					msg = "nanda";	
+					break;
+				case 1:	//left button pressed 
+					msg = "あいたい";
+					break;
+				case 2:	//up button pressed 
+					msg = "どこにいるの?";
+					break;
+				case 3:	//left button pressed 
+					msg = "ねむい";
+					break;
+				case 4:	//right button pressed 
+					msg = "かえりたい";
+					break;
+				default:
+					break;
+				}
 				alertDialog.setMessage(msg);
 				alertDialog.setIcon(android.R.drawable.ic_dialog_info);
 				alertDialog.setButton("はい", new DialogInterface.OnClickListener() {

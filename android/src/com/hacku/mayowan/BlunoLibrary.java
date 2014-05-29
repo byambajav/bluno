@@ -112,7 +112,7 @@ public abstract  class BlunoLibrary extends Activity{
 				mLeDeviceListAdapter = new LeDeviceListAdapter();
 				// Initializes and show the scan Device Dialog
 				mScanDeviceDialog = new AlertDialog.Builder(mainContext)
-				.setTitle("BLE Device Scan...").setAdapter(mLeDeviceListAdapter, new DialogInterface.OnClickListener() {
+				.setTitle("デバイス一覧").setAdapter(mLeDeviceListAdapter, new DialogInterface.OnClickListener() {
 
 					@Override
 					public void onClick(DialogInterface dialog, int which)

@@ -34,7 +34,7 @@ void setup() {
   myAccessory.begin();
   myBLUNO.init();
   myAccessory.setRGBLed(0,0,0);   //turn off the RGBLED
-  setTime(16,11,0,29,4,2014);
+  setTime(14,21,10,29,4,2014);
 }
 
 
@@ -115,7 +115,7 @@ void setLED () {
     ledBlue=0;
     myAccessory.setBuzzer(0);
   }
-  myAccessory.setRGBLed(ledRed/3, ledGreen/3, ledBlue/3);   //set the color to the RGBLED
+  myAccessory.setRGBLed(ledRed, ledGreen, ledBlue);   //set the color to the RGBLED
 }
 
 void loop()
